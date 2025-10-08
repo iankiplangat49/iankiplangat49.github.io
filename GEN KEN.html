@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generation Kenya Programme</title>
+<style>
+body {margin:0; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f0f4f8; color:#333;}
+header {background:linear-gradient(90deg,#0d47a1,#1976d2); color:white; display:flex; justify-content:space-between; align-items:center; padding:12px 25px; position:sticky; top:0; z-index:1000;}
+header img { height:45px; margin-right:10px; }
+nav a {color:white; text-decoration:none; margin:0 10px; font-weight:600; cursor:pointer; transition:0.3s;}
+nav a:hover { color:#ffcc00; transform:scale(1.1);}
+section {display:none; min-height:auto; overflow-y:auto; padding:0; margin:0; box-sizing:border-box; opacity:0; transform:translateY(0); transition:all 0.7s ease-out;}
+section.active { display:block; opacity:1; }
+.info-card, .program-card {max-width:600px; margin:25px auto; background:white; padding:30px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.15); transition:0.4s; font-size:20px; line-height:1.8;}
+.info-card:hover, .program-card:hover {transform:translateY(-10px); box-shadow:0 12px 30px rgba(0,0,0,0.25);}
+.gallery {display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px;}
+.gallery img {width:100%; height:220px; object-fit:cover; border-radius:15px; cursor:pointer; transition:all 0.4s;}
+.gallery img:hover {transform:scale(1.05); box-shadow:0 10px 25px rgba(0,0,0,0.4);}
+.btn {background:linear-gradient(90deg,#ff9800,#ff5722); color:white; padding:12px 30px; border-radius:50px; text-decoration:none; cursor:pointer; margin:5px; display:inline-block; transition:all 0.3s; font-weight:600; font-size:18px;}
+.btn:hover {background:linear-gradient(90deg,#e65100,#ff9800); transform:scale(1.05);}
+.back-btn {background:#1976d2; margin-top:20px; font-size:18px;}
+.back-btn:hover { background:#0d47a1; transform:scale(1.05);}
+#hero {display:flex; justify-content:center; align-items:center; flex-direction:column; text-align:center; color:white; background:url('https://images.unsplash.com/photo-1581090464577-41f6a1f7c631?auto=format&fit=crop&w=1350&q=80') no-repeat center/cover; position:relative; min-height:100vh;}
+#hero::after {content:""; position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:0;}
+#hero h1, #hero p, #hero .btn {position:relative; z-index:1;}
+#hero h1 { font-size:55px; margin-bottom:20px; }
+#hero p { font-size:22px; margin-bottom:30px; }
+footer {background:linear-gradient(90deg,#0d47a1,#1976d2); color:white; text-align:center; padding:30px 20px;}
+.lightbox {position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); display:none; justify-content:center; align-items:center; z-index:2000; flex-direction:column;}
+.lightbox.active {display:flex;}
+.lightbox img {max-width:90%; max-height:80%; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.5);}
+.lightbox .controls {margin-top:15px;}
+.lightbox .controls button {background:#ff5722; color:white; border:none; padding:10px 25px; border-radius:50px; cursor:pointer; font-size:16px; transition:0.3s;}
+.lightbox .controls button:hover {background:#e65100; transform:scale(1.05);}
+form {max-width:600px; margin:20px auto; display:flex; flex-direction:column;}
+form input, form textarea, form select {width:100%; padding:12px; margin:10px 0; border-radius:10px; border:1px solid #ccc; font-size:16px; box-sizing:border-box; transition:0.3s;}
+form input:focus, form textarea:focus, form select:focus {border-color:#1976d2; outline:none;}
+form button {width:auto; align-self:flex-start;}
+.reviews-container {display:flex; align-items:center; position:relative; max-width:1000px; margin:25px auto;}
+.reviews-wrapper {display:flex; overflow-x:auto; scroll-behavior:smooth; width:100%; padding:10px 0;}
+.review-card {min-width:250px; max-width:250px; margin:0 10px; background:white; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.15); padding:20px; text-align:center; flex-shrink:0;}
+.review-card img {width:80px; height:80px; border-radius:50%; margin-bottom:10px;}
+.stars {color: #ffcc00; font-size:18px; margin-bottom:10px;}
+.review-btn {background:#1976d2; color:white; border:none; font-size:30px; padding:10px; cursor:pointer; border-radius:50%; margin:0 10px; transition:0.3s;}
+.review-btn:hover {background:#0d47a1; transform:scale(1.1);}
+.social-icon {width:40px; height:40px; transition: transform 0.3s ease, box-shadow 0.3s ease;}
+.social-icon:hover {transform: scale(1.2); box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex; align-items:center;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Generation_Logo.png" alt="Logo">
+    <h3>Generation Kenya</h3>
+  </div>
+  <nav>
+    <a onclick="navigateTo('hero')">Home</a>
+    <a onclick="navigateTo('gallery')">Gallery</a>
+    <a onclick="navigateTo('reviews')">Reviews</a>
+  </nav>
+</header>
+
+<section id="hero" class="active">  
+  <h1>Welcome to Generation Kenya</h1>  
+  <p>Empowering youth with skills, opportunities & brighter futures 🌍</p>  
+  <div>  
+    <span class="btn" onclick="navigateTo('info')">View My Info</span>  
+    <span class="btn" onclick="navigateTo('programs')">Apply Now</span>  
+    <span class="btn" onclick="navigateTo('contact')">Donate</span>  
+    <span class="btn" onclick="navigateTo('about')">About Us</span>  
+  </div>  
+</section> 
+
+<section id="info">
+  <h2>Company Info</h2>
+  <div class="info-card">
+    <h3>Generation Kenya</h3>
+    <p><strong>Contact:</strong> <a href="tel:0729788839">0729788839</a></p>
+    <p><strong>Email:</strong> <a href="mailto:generationkenya@gmail.com">generationkenya@gmail.com</a></p>
+    <p><strong>Location:</strong> Nakuru, Kenya</p>
+    <p><strong>Days Open:</strong> Monday – Friday</p>
+    <span class="btn back-btn" onclick="goBack()">⬅ Back</span>
+  </div>
+</section>
+
+<section id="about">
+  <h2>About Us</h2>
+  <div class="info-card">
+    <p>Generation Kenya is a youth empowerment programme dedicated to equipping young people with practical skills, knowledge, and opportunities to succeed in today’s world.</p>
+    <p>We focus on digital training, entrepreneurship, and personal development, bridging the gap between education and employment.</p>
+    <p>Our vision is to nurture a generation of leaders, innovators, and change-makers who will transform Kenya and beyond.</p>
+    <span class="btn back-btn" onclick="goBack()">⬅ Back</span>
+  </div>
+</section> 
+
+<section id="programs">
+  <h2>Our Programs</h2>
+  <div class="program-card">
+    <h3>Digital Skills Training</h3>
+    <p>IT fundamentals, coding, graphic design, digital literacy.</p>
+    <p><strong>Duration:</strong> 4 Years</p>
+    <span class="btn" onclick="navigateTo('contact')">Apply</span>
+  </div>
+  <div class="program-card">
+    <h3>Entrepreneurship Program</h3>
+    <p>Business planning, financial management, startup strategies.</p>
+    <p><strong>Duration:</strong> 3 Years</p>
+    <span class="btn" onclick="navigateTo('contact')">Apply</span>
+  </div>
+  <div class="program-card">
+    <h3>Soft Skills Development</h3>
+    <p>Communication, leadership, teamwork, problem-solving.</p>
+    <p><strong>Duration:</strong> 1 Year</p>
+    <span class="btn" onclick="navigateTo('contact')">Apply</span>
+  </div>
+  <span class="btn back-btn" onclick="goBack()">⬅ Back</span>
+</section>
+
+<section id="gallery">
+  <h2>Photo Gallery</h2>
+  <div class="gallery">
+    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600" alt="Training" onclick="openLightbox(this)">
+    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600" alt="Teamwork" onclick="openLightbox(this)">
+    <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600" alt="Success" onclick="openLightbox(this)">
+  </div>
+  <span class="btn back-btn" onclick="goBack()">⬅ Back</span>
+</section>
+
+<section id="reviews">
+  <h2>Reviews & Testimonials</h2>
+  <div class="reviews-container">
+    <button class="review-btn" onclick="moveReview(-1)">&#10094;</button>
+    <div class="reviews-wrapper" id="reviewsWrapper"></div>
+    <button class="review-btn" onclick="moveReview(1)">&#10095;</button>
+  </div>
+  <span class="btn back-btn" onclick="goBack()">⬅ Back</span>
+</section>
+
+<section id="contact">
+  <h2>Contact Us</h2>
+  <p>📞 Phone: <a href="tel:0729788839">0729788839</a></p>
+  <p>📧 Email: <a href="mailto:generationkenya@gmail.com">generationkenya@gmail.com</a></p>
+  <p style="color:#555; margin-top:10px;">Before sending a message, check our About Us or Programs section — your question might already be answered!</p>
+
+  <form>
+    <input type="text" placeholder="Your Name" required>
+    <input type="email" placeholder="Your Email" required>
+    <div style="display:flex; gap:10px;">
+      <select name="phone_code" required>
+        <option value="+254">+254</option>
+        <option value="+255">+255</option>
+        <option value="+256">+256</option>
+      </select>
+      <input type="text" placeholder="Enter phone number" name="phone" required>
+    </div>
+   <div style="margin:8px 0;">
+      <label>Reason for Contact:</label>
+      <select name="inquiry_type" required style="width:100%; padding:10px; margin-top:5px;">
+        <option value="">-- Select --</option>
+        <option value="application">Application Inquiry</option>
+        <option value="programs">Program Details</option>
+        <option value="donation">Donation</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+
+
+
+    <div style="display:flex; gap:15px; align-items:center;">
+      <label>Gender:</label>
+      <label>Male <input type="radio" name="gender" value="male"></label>
+      <label>Female <input type="radio" name="gender" value="female"></label>
+    </div>
+    <div>
+      <label>Citizenship:</label>
+      <select name="citizenship" required>
+        <option value="kenyan">Kenyan</option>
+        <option value="ugandan">Ugandan</option>
+        <option value="tanzanian">Tanzanian</option>
+      </select>
+    </div>
+    <textarea placeholder="Your Message" rows="5"></textarea>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <label for="terms">I agree to the Terms & Conditions</label>
+      <input type="checkbox" id="terms" required>
+    </div>
+    <button type="submit">Send</button>
+  </form>
+
+  <div id="spinner" style="display:none; text-align:center; margin-top:15px;">
+    <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..." width="40">
+    <p>Sending...</p>
+  </div>
+
+  <div id="successMessage" style="display:none; text-align:center; margin-top:15px; color:green; font-weight:bold;">
+    ✅ Message sent successfully!
+  </div>
+
+  <span class="btn back-btn" onclick="goBack()">⬅ Back</span>
+</section>
+
+<footer>
+  <p>Connect with us:</p>
+  <div style="display:flex; justify-content:center; gap:15px; margin-top:10px;">
+    <a href="https://facebook.com/Kênyañ.nîccûr" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" class="social-icon">
+    </a>
+    <a href="https://instagram.com/i_a_n_t_e" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram" class="social-icon">
+    </a>
+    <a href="https://wa.me/254729788839?text=Hello%20Generation%20Kenya%2C%20I%20am%20interested%20in%20your%20programs." target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="social-icon">
+    </a>
+  </div>
+  <p>&copy; 2025 Generation Kenya Programme. All rights reserved.</p>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <img src="" alt="Full View">
+  <div class="controls">
+    <button onclick="closeLightbox()">Close</button>
+  </div>
+</div>
+
+<script>
+// Navigation
+let historyStack = ['hero'];
+window.history.replaceState({section:'hero'}, '');
+function navigateTo(id){
+  const current = document.querySelector('section.active');
+  if(current && current.id !== id) historyStack.push(current.id);
+  showSection(id);
+  window.history.pushState({section:id}, '');
+}
+function goBack(){
+  if(historyStack.length>0){showSection(historyStack.pop());}
+  else{showSection('hero');}
+}
+function showSection(id){
+  document.querySelectorAll('section').forEach(sec=>sec.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+window.onpopstate = function(){goBack();};
+
+function openLightbox(img){
+  const lb=document.getElementById('lightbox');
+  lb.querySelector('img').src=img.src;
+  lb.classList.add('active');
+}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('active');}
+
+const reviewsWrapper = document.getElementById('reviewsWrapper');
+for(let i=1;i<=50;i++){
+  const div = document.createElement('div');
+  div.className='review-card';
+  const stars='⭐'.repeat((i%5)+1);
+  div.innerHTML=`<img src="https://randomuser.me/api/portraits/lego/${i%10}.jpg" alt="User ${i}"><h3>User ${i}</h3><div class="stars">${stars}</div><p>"This is review number ${i}. Generation Kenya is amazing!"</p>`;
+  reviewsWrapper.appendChild(div);
+}
+
+function moveReview(direction){
+  reviewsWrapper.scrollBy({left:direction*300, behavior:'smooth'});
+}
+
+/* 🔽 ADD THIS PART AT THE END 🔽 */
+const contactForm = document.querySelector("#contact form");
+const spinner = document.getElementById("spinner");
+const successMessage = document.getElementById("successMessage");
+
+contactForm.addEventListener("submit", function(e){
+  e.preventDefault();
+  spinner.style.display = "block";
+  successMessage.style.display = "none";
+
+  setTimeout(() => {
+    spinner.style.display = "none";
+    successMessage.style.display = "block";
+    contactForm.reset();
+
+    setTimeout(() => {
+      successMessage.style.display = "none";
+    }, 3000);
+
+  }, 2000);
+});
+</script>
+</body>
+</html>
